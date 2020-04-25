@@ -1,0 +1,4 @@
+<button *ngIf="!value" nbButton status="warning" onmousedown="event.preventDefault();">{{value}}</button>
+<button *ngIf="value === 'O'" nbButton status="danger" onmousedown="event.preventDefault();">{{value}}</button>
+<button *ngIf="value === 'X'" nbButton status="success" onmousedown="event.preventDefault();">{{value}}</button>
+
