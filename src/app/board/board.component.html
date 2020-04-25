@@ -1,7 +1,7 @@
 <main>
     <section class="game">
-        <h2 *ngIf="winner">Ganador: {{winner}}</h2>
-        <h2 *ngIf="!winner">Turno: {{player}}</h2>
+        <h3 *ngIf="winner">Ganador: {{winner}}</h3>
+        <h3 *ngIf="!winner">Turno: {{player}}</h3>
         <button nbButton status="primary" (click)="newGame()">Nuevo juego</button>
     </section>
     <section class="board">

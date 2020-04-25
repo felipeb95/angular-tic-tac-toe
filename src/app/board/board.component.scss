@@ -7,19 +7,44 @@ main {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 600px;
+        width: 36vw;
         height: 50px;
     }
     .board {
         display: grid;
-        grid-template-columns: 200px 200px 200px;
-        grid-gap: 0;
+        grid-template-columns: 12vw 12vw 12vw;
+        grid-gap: 4px;
         margin-top: 20px;
     }
 }
 
 
 app-square {
-    border: 1px darkslategrey solid;
-    height: 200px;
+    height: 12vw;
+}
+
+@media only screen and (min-width: 601px) and (max-width: 900px) {
+    main .game {
+        width: 60vw;
+    }
+    main .board {
+        grid-template-columns: 20vw 20vw 20vw;
+    }
+
+    app-square {
+        height: 20vw;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    main .game {
+        width: 90vw;
+    }
+    main .board {
+        grid-template-columns: 30vw 30vw 30vw;
+    }
+
+    app-square {
+        height: 30vw;
+    }
 }
