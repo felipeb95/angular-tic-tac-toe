@@ -42,3 +42,8 @@ yarn-error.log
 
 .notes.md
 baseline.json
+.firebaserc
+firebase.json
+.firebase/hosting.ZGlzdA.cache
+.firebase/hosting.ZGlzdC9hbmd1bGFyLXRpYy10YWMtdG9l.cache
+public/index.html

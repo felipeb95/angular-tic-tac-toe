@@ -21,6 +21,7 @@ export class BoardComponent implements OnInit {
     this.squares = Array(9).fill(null);
     this.winner = null;
     this.xIsNext = true;
+    this.aiMoves();
   }
 
   get player() {
@@ -28,14 +29,82 @@ export class BoardComponent implements OnInit {
   }
 
   makeMove(idx: number) {
-    if (!this.squares[idx]) {
+    if (!this.squares[idx] && !this.winner) {
       this.squares.splice(idx, 1, this.player);
+      this.winner = this.calculateWinner(this.squares);
       this.xIsNext = !this.xIsNext;
     }
-    this.winner = this.calculateWinner();
+    if (this.xIsNext && !this.winner) {
+      this.aiMoves();
+      this.winner = this.calculateWinner(this.squares);
+    }
   }
 
-  calculateWinner() {
+  aiMoves() {
+    let bestScore = -Infinity;
+    let bestMove: number;
+    let idx = 0;
+    for (const square of this.squares) {
+      if (!square) {
+        this.squares.splice(idx, 1, this.player);
+        const score = this.minimax([...this.squares], 0, false);
+        this.squares.splice(idx, 1, null);
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = idx;
+        }
+      }
+      idx++;
+    }
+    this.squares.splice(bestMove, 1, this.player);
+    this.xIsNext = !this.xIsNext;
+  }
+
+  minimax(squares: any[], depth: number, isMaximizing: boolean): number {
+    const winner = this.calculateWinner(squares);
+    if (winner === 'X') {
+      return 10;
+    }
+    if (winner === 'O') {
+      return -10;
+    }
+    if (winner === 'tie') {
+      return 0;
+    }
+    if (isMaximizing) {
+      let idx = 0;
+      let bestScore = -Infinity;
+      for (const square of squares) {
+        if (!square) {
+          squares[idx] = 'X';
+          const score = this.minimax([...squares], depth + 1, false);
+          squares[idx] = null;
+          if (score > bestScore) {
+            bestScore = score;
+          }
+        }
+        idx++;
+      }
+      return bestScore;
+    } else {
+      let idx = 0;
+      let bestScore = Infinity;
+      for (const square of squares) {
+        if (!square) {
+          squares[idx] = 'O';
+          const score = this.minimax([...squares], depth + 1, true);
+          squares[idx] = null;
+          if (score < bestScore) {
+            bestScore = score;
+          }
+        }
+        idx++;
+      }
+      return bestScore;
+    }
+  }
+
+  calculateWinner(squares: any[]) {
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -49,12 +118,15 @@ export class BoardComponent implements OnInit {
     for (const line of lines) {
       const [a, b, c] = line;
       if (
-        this.squares[a] &&
-        this.squares[a] === this.squares[b] &&
-        this.squares[a] === this.squares[c]
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
       ) {
-        return this.squares[a];
+        return squares[a];
       }
+    }
+    if (!squares.includes(null)) {
+      return 'tie';
     }
     return null;
   }
